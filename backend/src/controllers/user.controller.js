@@ -28,6 +28,21 @@ export const getUsers = async (req, res) => {
   }
 };
 
+export const getUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    let sql = `SELECT * FROM usuarios WHERE pk_id_user = ?`;
+    const [rows] = await pool.query(sql, [id]);
+    if (rows.length > 0) {
+      res.status(200).json({ message: "Los usuarios son: ", data: rows });
+    } else {
+      res.status(404).json({ message: "No hay usuarios registrados por el momento" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error en el servidor " + error });
+  }
+};
+
 export const createUser = async (req, res) => {
   try {
     let errors = validationResult(req);

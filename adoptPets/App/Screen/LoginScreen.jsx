@@ -19,7 +19,7 @@ import LinkBoton from '../components/atoms/button/linkboton';
 import {IP} from '../Api/context/ip';
 // const ip = IP;
 
-const ip = "http://192.168.1.5:3000";
+const ip = "http://192.168.1.4:3000";
 
 const LoginScreen = ({visible, onClose}) => {
   const navigation = useNavigation();
@@ -85,7 +85,7 @@ const LoginScreen = ({visible, onClose}) => {
           setLoginSuccess(true);
           setIsLoading(false);
           console.log(token);
-          navigation.navigate('Comprador');
+          navigation.navigate('Visitante');
           Alert.alert('Inicio de sesión exitoso');
         } else {
           throw new Error('Datos de respuesta inválidos');

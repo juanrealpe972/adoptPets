@@ -1,77 +1,84 @@
-import React, { useState } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import PerfilScreen from "../components/templates/perfil";
-import Home from "../components/templates/Home";
-import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import iconNotifi from '../resources/notificacionesIcono.png'
-import { Image , TouchableOpacity, View, Text} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import iconSub from '../resources/IconoSubCoffee.png';
-import modalSide from "./modalsidebar";
+import React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import PerfilScreen from '../components/templates/perfil';
+import Home from '../components/templates/Home';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Image, TouchableOpacity, View, Text} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import iconSub from '../resources/logo_adoptpets.jpg';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigationCom = () => {
-  const navigation = useNavigation()
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // const userName = "Kaata"; // Asegúrate de que este nombre se pasa correctamente
-  // console.log("userName en TabNavigationCom:", userName);
+  const navigation = useNavigation();
 
   return (
-    <>
-    
     <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarShowLabel: false,
-      tabBarActiveTintColor: '#39A800',
-      tabBarInactiveTintColor: 'grey',
-      tabBarActiveBackgroundColor: 'rgba(57, 168, 0, 0.1)',
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-        if (route.name === 'SubCoffee') {
-          iconName = 'house';
-          return <FontAwesome6 name={iconName} size={size} color={color} />;
-        } else if (route.name === 'Perfil') {
-          iconName = 'person-circle-sharp';
-          return <Ionicons name={iconName} size={size} color={color} />;
-        }
-      },
-    })}
-  >
-       <Tab.Screen
-        name="SubCoffee"
+      screenOptions={({route}) => ({
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: 'rgb(191, 174, 103)', 
+        tabBarInactiveTintColor: 'grey',
+        tabBarActiveBackgroundColor: 'rgba(57, 168, 0, 0.1)',
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = 'house';
+            return <FontAwesome6 name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Perfil') {
+            iconName = 'person-circle-sharp';
+            return <Ionicons name={iconName} size={size} color={color} />;
+          }
+        },
+      })}>
+      <Tab.Screen
+        name="Home"
         component={Home}
         options={{
-          tabBarLabel: 'SubCoffee', 
-          tabBarLabelStyle: { color: '#FFF' }, 
+          tabBarLabel: 'Home',
+          tabBarLabelStyle: {color: '#FFF'},
           headerTitle: () => (
-            // <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              
-              <Image
-                source={iconSub}
-                style={{ width: 40, height: 40,  marginLeft: 6 }}
-              />
-                 <Text style={{ color:'#FFF',fontSize: 26, fontWeight: 'bold', marginLeft: 8 }}>
-                SubCoffee
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 26,
+                  fontWeight: 'bold',
+                }}>
+                ADOPTSPETS
               </Text>
             </View>
-            //  </TouchableOpacity>
           ),
-            
-            
-          headerStyle: { backgroundColor: '#4FBA18' },
-          headerTitleStyle: { color: '#FFF' , fontSize:25, fontWeight:'bold'}, 
-          headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate('Notificaciones')}>
-              <Image
-              source={iconNotifi} 
-              style={{ width: 26, height: 26, marginRight: 26, tintColor:'white'}} 
-            />
+          headerStyle: {
+            backgroundColor: '#FFF',
+            borderBottomWidth: 1,
+            borderBottomColor: '#ccc',
+            shadowColor: '#000',
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.2,
+            shadowRadius: 2,
+            elevation: 5,
+          },
+          headerTitleStyle: {color: 'black', fontSize: 25, fontWeight: 'bold'},
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.toggleDrawer()}
+              style={{marginLeft: 16}}
+            >
+              <MaterialIcons name="menu" size={28} color="black" />
             </TouchableOpacity>
-            
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Perfil')}
+              style={{marginRight: 16}}
+            >
+              <Image
+                source={iconSub}
+                style={{width: 40, height: 40, marginLeft: 6}}
+              />
+            </TouchableOpacity>
           ),
         }}
       />
@@ -79,22 +86,26 @@ const TabNavigationCom = () => {
         name="Perfil"
         component={PerfilScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name='person-circle-sharp' size={34} color={color} />
+          tabBarIcon: ({color, size}) => (
+            <Ionicons name="person-circle-sharp" size={34} color={color} />
           ),
-          tabBarLabelStyle: { color: '#FFF' }, 
-          headerTitle: 'Perfil', 
-          headerStyle: { backgroundColor: '#4FBA18' },
-          headerTitleStyle: { color: '#FFF' , fontSize:25, fontWeight:'bold'}, 
+          tabBarLabelStyle: {color: '#FFF'},
+          headerTitle: 'Perfil',
+          headerStyle: {
+            backgroundColor: '#FFF',
+            borderBottomWidth: 1,
+            borderBottomColor: '#ccc',
+            shadowColor: '#000',
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.2,
+            shadowRadius: 2,
+            elevation: 5,
+          },
+          headerTitleStyle: {color: 'black', fontSize: 25, fontWeight: 'bold'},
         }}
       />
-       
     </Tab.Navigator>
-  
-          {/* <modalSide visible={isModalVisible} onClose={() => setIsModalVisible(false)}/> */}
-
-    </>
-);
+  );
 };
 
-    export default TabNavigationCom;
+export default TabNavigationCom;

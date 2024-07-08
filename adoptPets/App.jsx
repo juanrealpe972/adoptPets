@@ -8,9 +8,7 @@ import FirstPage from './App/Screen/FirstPage/firstPage.jsx';
 import TabNavigationCom from './App/navigation/TabsNavigationCom.jsx';
 import TabNavigationVen from './App/navigation/TabsNavigationVen.jsx';
 import SideBar from './App/navigation/sidebar.jsx';
-import ForgotPassword from './App/Screen/RegisterUser.jsx';
 import OfertaScreen from './App/Screen/OfertaScreen.jsx';
-import Notificaciones from './App/components/templates/notificaciones.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,30 +46,19 @@ const App = () => {
                 }}
               />
               <Stack.Screen
-                name="Comprador"
+                name="Visitante"
                 component={TabNavigationCom}
                 options={{
                   headerShown: false,
                   headerBackTitleVisible: false,
                 }}
-              />
+              /> 
               <Stack.Screen
-                name="Vendedor"
+                name="Administrador"
                 component={TabNavigationVen}
                 options={{
                   headerShown: false,
                   headerBackTitleVisible: false,
-                }}
-              />
-              <Stack.Screen
-                name="Recuperar-Password"
-                component={ForgotPassword}
-                options={{
-                  title: 'Recuperar Contraseña',
-                  headerStyle: {
-                    backgroundColor: '#39A800',
-                  },
-                  headerTintColor: 'white',
                 }}
               />
               <Stack.Screen
@@ -80,19 +67,7 @@ const App = () => {
                 options={{
                   title: 'Ofertar',
                   headerStyle: {
-                    backgroundColor: '#39A800',
-                  },
-                  headerTintColor: 'white',
-                }}
-              />
-
-              <Stack.Screen
-                name="Notificaciones"
-                component={Notificaciones}
-                options={{
-                  title: 'Notificaciones',
-                  headerStyle: {
-                    backgroundColor: '#39A800',
+                    backgroundColor: '#FDFFFE',
                   },
                   headerTintColor: 'white',
                 }}

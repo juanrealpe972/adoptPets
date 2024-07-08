@@ -5,7 +5,8 @@ import {
     updateUser,
     deleteUser,
     activarUsuario,
-    desactivarUsuario
+    desactivarUsuario,
+    getUser
 } from "../controllers/user.controller.js";
 import { validationRegisterUser, validationUpdateUser } from "../validations/user.validation.js";
 
@@ -14,6 +15,7 @@ const routerUser = Router();
 routerUser.post("/users", validationRegisterUser, createUser);
 routerUser.get("/users", getUsers);
 routerUser.put("/users/:id", validationUpdateUser, updateUser);
+routerUser.get("/user/:id", getUser);
 routerUser.delete("/users/:id", deleteUser);
 routerUser.put("/usersac/:id", activarUsuario);
 routerUser.put("/usersdes/:id", desactivarUsuario);

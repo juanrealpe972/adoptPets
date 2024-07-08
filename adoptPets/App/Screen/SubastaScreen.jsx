@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Modal } from 'react-native';
 import LinkBoton from '../components/atoms/button/linkboton';
-import Input from '../components/atoms/inputs/Inputs';
 import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -60,8 +59,6 @@ const SubastaScreen = () => {
               />
             </View>
           </Modal>
-
-          
         </View>
       </View>
 
