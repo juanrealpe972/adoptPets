@@ -1,12 +1,11 @@
 import { createPool } from "mysql2/promise";
-import { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } from "../config.js";
 
 export const pool = createPool({
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    port: DB_PORT,
-    database: DB_NAME,
+    host: "monorail.proxy.rlwy.net",
+    user: "root",
+    password: "nThkSWCVYUTVJBjdLtevgsDiiQcUXvGE",
+    port: 24281,
+    database: "railway",
 });
 
 //Validar conexión a la base de datos
