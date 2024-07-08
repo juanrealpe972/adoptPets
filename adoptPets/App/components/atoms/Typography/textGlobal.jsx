@@ -1,11 +1,9 @@
 import { StyleSheet } from "react-native";
 
-
 export const Typography = StyleSheet.create({
     title:{
         fontSize:50,
         fontWeight:'900',
-       
     },
     titlePage:{
         fontSize:30,
@@ -14,7 +12,6 @@ export const Typography = StyleSheet.create({
     subtitle:{
         fontSize:20,
         fontWeight:'bold',
-        
     },
     body:{
         fontSize:16,

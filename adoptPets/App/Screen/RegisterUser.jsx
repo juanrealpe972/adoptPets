@@ -1,14 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-const ForgotPassword = () => {
+const RegisterUser = () => {
     return (
       <View>
-        <Text>
-          Hola desde Oferta
-        </Text>
+        <Text>Hola desde RegisterUser</Text>
       </View>
     )
   }
   
-  export default ForgotPassword
+  export default RegisterUser

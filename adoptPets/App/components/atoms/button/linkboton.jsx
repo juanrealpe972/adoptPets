@@ -22,23 +22,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    padding: 20, // Added padding to the container
+    padding: 20,
   },
   boton: {
-    width: 160,
-    height: 40,
+    width: 240,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
     marginTop: 15,
-    backgroundColor: '#39A800',
+    backgroundColor: '#E89551',
     borderRadius: 10,
-    paddingHorizontal: 10, // Adjusted padding for better spacing
+    paddingHorizontal: 10,
   },
   texto: {
-    color: 'white',
-    fontSize: 20,
+    color: '#001528',
+    fontSize: 30,
     fontWeight: '500',
   }
 });
