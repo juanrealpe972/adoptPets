@@ -31,7 +31,11 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   const id = req.params.id;
   try {
-    let sql = `SELECT * FROM usuarios WHERE pk_id_user = ?`;
+    let sql = `SELECT u.*, m.nombre_muni, d.nombre_depar
+      FROM usuarios u
+      JOIN municipios m ON u.fk_id_municipio = m.pk_id_muni
+      JOIN departamentos d ON m.pk_id_muni = d.pk_id_depar
+      WHERE pk_id_user = ?`;
     const [rows] = await pool.query(sql, [id]);
     if (rows.length > 0) {
       res.status(200).json({ message: "Los usuarios son: ", data: rows });
