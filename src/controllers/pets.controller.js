@@ -54,6 +54,27 @@ export const getPetsActivos = async (req, res) => {
   }
 };
 
+export const getPetsEspera = async (req, res) => {
+  try {
+    let sql =
+    `
+      SELECT m.*, r.nombre_raza, c.nombre_cate 
+      FROM mascotas m
+      JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
+      JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
+      WHERE estado_mas = 'espera'
+    `;
+    const [rows] = await pool.query(sql);
+    if (rows.length > 0) {
+      res.status(200).json({ message: "Las mascotas son: ", data: rows });
+    } else {
+      res.status(404).json({ message: "No hay mascotas por adoptar por el momento" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error en el servidor " + error });
+  }
+};
+
 export const getPet = async (req, res) => {
   const id = req.params.id;
   try {
