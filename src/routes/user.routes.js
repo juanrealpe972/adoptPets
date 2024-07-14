@@ -12,7 +12,7 @@ import { validationRegisterUser, validationUpdateUser } from "../validations/use
 
 const routerUser = Router();
 
-routerUser.post("/users", validationRegisterUser, createUser);
+routerUser.post("/users", createUser);
 routerUser.get("/users", getUsers);
 routerUser.put("/users/:id", validationUpdateUser, updateUser);
 routerUser.get("/user/:id", getUser);
