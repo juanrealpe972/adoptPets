@@ -31,10 +31,10 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   const id = req.params.id;
   try {
-    let sql = `SELECT u.*, m.nombre_muni, d.nombre_depar
+    let sql = `SELECT u.*, m.*, d.*
       FROM usuarios u
       JOIN municipios m ON u.fk_id_municipio = m.pk_id_muni
-      JOIN departamentos d ON m.pk_id_muni = d.pk_id_depar
+      JOIN departamentos d ON m.fk_id_depar = d.pk_id_depar
       WHERE pk_id_user = ?`;
     const [rows] = await pool.query(sql, [id]);
     if (rows.length > 0) {
@@ -54,7 +54,22 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { pk_id_user, nombre_user, email_user, password_user, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio } = req.body;
+    const { 
+      pk_id_user, 
+      nombre_user, 
+      email_user, 
+      password_user, 
+      telefono_user, 
+      ubicacion_user, 
+      tipo_vivienda_user, 
+      espacio_dispo_user, 
+      canti_mas_hogar_user, 
+      horas_en_casa_user, 
+      experiencia_user, 
+      disponibilidad_user, 
+      economia_user, 
+      fk_id_municipio 
+    } = req.body;
     const bcryptPassword = bcrypt.hashSync(password_user, 12);
     
     let sql = `INSERT INTO usuarios (pk_id_user, nombre_user, email_user, password_user, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio, rol_user, estado_user) VALUES ('${pk_id_user}', '${nombre_user}','${email_user}','${bcryptPassword}', '${telefono_user}', '${ubicacion_user}', '${tipo_vivienda_user}', '${espacio_dispo_user}', '${canti_mas_hogar_user}', '${horas_en_casa_user}', '${experiencia_user}', '${disponibilidad_user}', '${economia_user}', '${fk_id_municipio}', 'visitante', 'activo')`;
@@ -76,27 +91,56 @@ export const updateUser = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const id = req.params.id;
-    const { nombre_user, email_user, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio, rol_user, estado_user } = req.body;
+    const { id } = req.params;
+    const {       
+      pk_id_user, 
+      nombre_user, 
+      email_user, 
+      telefono_user, 
+      ubicacion_user, 
+      tipo_vivienda_user, 
+      espacio_dispo_user, 
+      canti_mas_hogar_user, 
+      horas_en_casa_user, 
+      experiencia_user, 
+      disponibilidad_user, 
+      economia_user, 
+      fk_id_municipio 
+    } = req.body;
 
     let sql = `UPDATE usuarios SET 
-      nombre_user = '${nombre_user}', 
-      email_user = '${email_user}', 
-      telefono_user = '${telefono_user}', 
-      ubicacion_user = '${ubicacion_user}', 
-      tipo_vivienda_user = '${tipo_vivienda_user}', 
-      espacio_dispo_user = '${espacio_dispo_user}', 
-      canti_mas_hogar_user = ${canti_mas_hogar_user}, 
-      horas_en_casa_user = ${horas_en_casa_user}, 
-      experiencia_user = '${experiencia_user}', 
-      disponibilidad_user = ${disponibilidad_user}, 
-      economia_user = '${economia_user}', 
-      fk_id_municipio = ${fk_id_municipio}, 
-      rol_user = '${rol_user}', 
-      estado_user = '${estado_user}'
-      WHERE pk_id_user = '${id}'`;
+      pk_id_user = IFNULL(?, pk_id_user), 
+      nombre_user = IFNULL(?, nombre_user), 
+      email_user = IFNULL(?, email_user), 
+      telefono_user = IFNULL(?, telefono_user), 
+      ubicacion_user = IFNULL(?, ubicacion_user), 
+      tipo_vivienda_user = IFNULL(?, tipo_vivienda_user), 
+      espacio_dispo_user = IFNULL(?, espacio_dispo_user), 
+      canti_mas_hogar_user = IFNULL(?, canti_mas_hogar_user), 
+      horas_en_casa_user = IFNULL(?, horas_en_casa_user), 
+      experiencia_user = IFNULL(?, experiencia_user), 
+      disponibilidad_user = IFNULL(?, disponibilidad_user), 
+      economia_user = IFNULL(?, economia_user), 
+      fk_id_municipio = IFNULL(?, fk_id_municipio) 
+      WHERE pk_id_user = ?`;
 
-    const [result] = await pool.query(sql);
+    const [result] = await pool.query(sql, [
+      pk_id_user, 
+      nombre_user, 
+      email_user, 
+      telefono_user, 
+      ubicacion_user, 
+      tipo_vivienda_user, 
+      espacio_dispo_user, 
+      canti_mas_hogar_user, 
+      horas_en_casa_user, 
+      experiencia_user, 
+      disponibilidad_user, 
+      economia_user, 
+      fk_id_municipio,
+      id
+    ]);
+
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Usuario actualizado con éxito" });
     } else {
@@ -106,6 +150,7 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: "Error en el servidor: " + error });
   }
 };
+
 
 export const deleteUser = async (req, res) => {
   try {

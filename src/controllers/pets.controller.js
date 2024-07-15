@@ -80,10 +80,11 @@ export const getPet = async (req, res) => {
   try {
     let sql = 
     `
-      SELECT m.*, r.nombre_raza, c.nombre_cate 
+      SELECT m.*, r.nombre_raza, c.nombre_cate, u.nombre_user, u.email_user
       FROM mascotas m
       JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
       JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
+      JOIN usuarios u ON m.fk_adoptante = u.pk_id_user
       WHERE m.pk_id_mas = '${id}';
     `;
     const [rows] = await pool.query(sql);

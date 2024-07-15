@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { activarMascota, cargarImagen, createPet, deleteAdopt, deleteMascota, desactivarMascota, esperaMascota, getPet, getPets, getPetsActivos, updatePet } from "../controllers/pets.controller.js";
+import { activarMascota, cargarImagen, createPet, deleteAdopt, deleteMascota, desactivarMascota, esperaMascota, getPet, getPets, getPetsActivos, getPetsEspera, updatePet } from "../controllers/pets.controller.js";
 
 const routerPet = Router();
 
 routerPet.get("/pets", getPets);
 routerPet.get("/petsactivos", getPetsActivos);
+routerPet.get("/petsespera", getPetsEspera);
 routerPet.get("/petsone/:id", getPet);
 routerPet.post("/pets", cargarImagen, createPet);
 routerPet.put("/pets/:id", cargarImagen, updatePet);
