@@ -80,7 +80,29 @@ export const getPet = async (req, res) => {
   try {
     let sql = 
     `
-      SELECT m.*, r.nombre_raza, c.nombre_cate, u.nombre_user, u.email_user
+      SELECT m.*, r.nombre_raza, c.nombre_cate
+      FROM mascotas m
+      JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
+      JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
+      WHERE m.pk_id_mas = '${id}';
+    `;
+    const [rows] = await pool.query(sql);
+    if (rows.length > 0) {
+      res.status(200).json({ message: "La mascota es: ", data: rows });
+    } else {
+      res.status(404).json({ message: "No se encontro la mascota con el ID proporcionado" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error en el servidor " + error });
+  }
+};
+
+export const getPetDue = async (req, res) => {
+  const id = req.params.id;
+  try {
+    let sql = 
+    `
+      SELECT m.*, r.nombre_raza, c.nombre_cate, u.nombre_user, u.email_user, u.pk_id_user
       FROM mascotas m
       JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
       JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
