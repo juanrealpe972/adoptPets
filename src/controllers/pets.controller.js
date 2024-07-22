@@ -203,7 +203,7 @@ export const desactivarMascota = async (req, res) => {
 export const activarMascota = async (req, res) => {
   const id = req.params.id;
   try {
-    const [result] = await pool.query(`UPDATE mascotas SET estado_mas = 1 WHERE pk_id_mas = ${id}`);
+    const [result] = await pool.query(`UPDATE mascotas SET estado_mas = 1, fk_adoptante = NULL WHERE pk_id_mas = ${id}`);
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Mascota activada exitosamente" });
     } else {
