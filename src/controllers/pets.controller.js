@@ -216,18 +216,19 @@ export const activarMascota = async (req, res) => {
 
 export const esperaMascota = async (req, res) => {
   const id = req.params.id;
-  const {adoptanteId} = req.body
+  const { adoptanteId } = req.body;
 
   try {
     const [result] = await pool.query(`UPDATE mascotas SET estado_mas = 3, fk_adoptante = ? WHERE pk_id_mas = ?`, [adoptanteId, id]);
-    
+
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Mascota en espera exitosamente" });
     } else {
       res.status(404).json({ message: `No se encontró ninguna mascota con el ID ${id}` });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error en el servidor" + error });
+    console.error("Error en el servidor:", error);
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
