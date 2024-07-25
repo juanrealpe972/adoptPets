@@ -49,7 +49,7 @@ export const getUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    let errors = validationResult(req);
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -70,17 +70,37 @@ export const createUser = async (req, res) => {
       economia_user, 
       fk_id_municipio 
     } = req.body;
+    
     const bcryptPassword = bcrypt.hashSync(password_user, 12);
     
-    let sql = `INSERT INTO usuarios (pk_id_user, nombre_user, email_user, password_user, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio, rol_user, estado_user) VALUES ('${pk_id_user}', '${nombre_user}','${email_user}','${bcryptPassword}', '${telefono_user}', '${ubicacion_user}', '${tipo_vivienda_user}', '${espacio_dispo_user}', '${canti_mas_hogar_user}', '${horas_en_casa_user}', '${experiencia_user}', '${disponibilidad_user}', '${economia_user}', '${fk_id_municipio}', 'visitante', 'activo')`;
-    const [result] = await pool.query(sql);
+    const sql = `INSERT INTO usuarios (pk_id_user, nombre_user, email_user, password_user, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio, rol_user, estado_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'visitante', 'activo')`;
+    const values = [
+      pk_id_user, 
+      nombre_user, 
+      email_user, 
+      bcryptPassword, 
+      telefono_user, 
+      ubicacion_user, 
+      tipo_vivienda_user, 
+      espacio_dispo_user, 
+      canti_mas_hogar_user, 
+      horas_en_casa_user, 
+      experiencia_user, 
+      disponibilidad_user, 
+      economia_user, 
+      fk_id_municipio
+    ];
+    
+    const [result] = await pool.query(sql, values);
+    
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Usuario creado exitosamente" });
     } else {
       res.status(404).json({ message: "No se pudo crear el usuario" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error en el servidor" + error });
+    console.error("Error en el servidor:", error);
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
