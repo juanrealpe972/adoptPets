@@ -102,7 +102,7 @@ export const getPetDue = async (req, res) => {
   try {
     let sql = 
     `
-      SELECT m.*, r.nombre_raza, c.nombre_cate, u.nombre_user, u.email_user, u.pk_id_user
+      SELECT m.*, r.nombre_raza, c.nombre_cate, u.nombre_user, u.email_user, u.pk_id_user, u.telefono_user
       FROM mascotas m
       JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
       JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
@@ -126,10 +126,10 @@ export const createPet = async (req, res) => {
         if (!errors.isEmpty()) {
             res.status(400).json({ errors: errors.array() });
         }
-        const { nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, esterilizacion_castracion_mas, enfermedades_mas, tratamientos_mas, energia_mas, compatibilidad_mas, habitos_mas, necesidades_mas, lugar_rescate_mas, condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, estado_mas, fk_raza_mas } = req.body;
+        const { nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, esterilizacion_castracion_mas, enfermedades_mas, tratamientos_mas, energia_mas, compatibilidad_mas, habitos_mas, necesidades_mas, lugar_rescate_mas, condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, fk_raza_mas } = req.body;
         const imagen_pet = req.file ? req.file.originalname : "";
         let sql = `INSERT INTO mascotas (nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, esterilizacion_castracion_mas, enfermedades_mas, tratamientos_mas, energia_mas, compatibilidad_mas, habitos_mas, necesidades_mas, lugar_rescate_mas, condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, estado_mas, fk_raza_mas, imagen_pet) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const values = [ nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, esterilizacion_castracion_mas, enfermedades_mas, tratamientos_mas, energia_mas, compatibilidad_mas, habitos_mas, necesidades_mas, lugar_rescate_mas, condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, estado_mas, fk_raza_mas, imagen_pet];
+        const values = [ nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, esterilizacion_castracion_mas, enfermedades_mas, tratamientos_mas, energia_mas, compatibilidad_mas, habitos_mas, necesidades_mas, lugar_rescate_mas, condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, 'activo', fk_raza_mas, imagen_pet];
         const [result] = await pool.query(sql, values);
         if (result.affectedRows > 0) {
             res.status(200).json({ message: "Mascota registrada exitosamente" });
