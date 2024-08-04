@@ -37,7 +37,7 @@ export const getPetsActivos = async (req, res) => {
   try {
     let sql =
     `
-      SELECT m.*, r.nombre_raza, c.nombre_cate 
+      SELECT m.*, r.nombre_raza, c.nombre_cate, DATE_FORMAT(m.fecha_adop_mas, '%Y-%m-%d') AS fecha_adop_mas
       FROM mascotas m
       JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
       JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
@@ -58,7 +58,7 @@ export const getPetsEspera = async (req, res) => {
   try {
     let sql =
     `
-      SELECT m.*, r.nombre_raza, c.nombre_cate 
+      SELECT m.*, r.nombre_raza, c.nombre_cate, DATE_FORMAT(m.fecha_adop_mas, '%Y-%m-%d') AS fecha_adop_mas
       FROM mascotas m
       JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
       JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
@@ -79,11 +79,33 @@ export const getPetsInactivo = async (req, res) => {
   try {
     let sql =
     `
-      SELECT m.*, r.nombre_raza, c.nombre_cate 
+      SELECT m.*, r.nombre_raza, c.nombre_cate, DATE_FORMAT(m.fecha_adop_mas, '%Y-%m-%d') AS fecha_adop_mas
       FROM mascotas m
       JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
       JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
       WHERE estado_mas = 'inactivo'
+    `;
+    const [rows] = await pool.query(sql);
+    if (rows.length > 0) {
+      res.status(200).json({ message: "Las mascotas son: ", data: rows });
+    } else {
+      res.status(404).json({ message: "No hay mascotas por adoptar por el momento" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error en el servidor " + error });
+  }
+};
+
+export const getMisPets = async (req, res) => {
+  const id = req.params.id;
+  try {
+    let sql =
+    `
+      SELECT m.*, r.nombre_raza, c.nombre_cate, DATE_FORMAT(m.fecha_adop_mas, '%Y-%m-%d') AS fecha_adop_mas
+      FROM mascotas m
+      JOIN razas r ON m.fk_raza_mas = r.pk_id_raza
+      JOIN categorias c ON r.fk_id_cate = c.pk_id_cate
+      WHERE fk_adoptante = '${id}'
     `;
     const [rows] = await pool.query(sql);
     if (rows.length > 0) {
@@ -164,7 +186,7 @@ export const createPet = async (req, res) => {
 
 export const updatePet = async (req, res) => {
   try {
-    let errors = validationResult(req);
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -177,64 +199,75 @@ export const updatePet = async (req, res) => {
       condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, fk_raza_mas 
     } = req.body;
 
+    const imagen_pet = req.file ? req.file.originalname : null;
+
     let sql = `UPDATE mascotas SET 
-      nombre_mas = ?, 
-      edad_mas = ?, 
-      tamano_mas = ?, 
-      peso_mas = ?, 
-      descripcion_mas = ?, 
-      vacunacion_mas = ?, 
-      esterilizacion_castracion_mas = ?, 
-      enfermedades_mas = ?, 
-      tratamientos_mas = ?, 
-      energia_mas = ?, 
-      compatibilidad_mas = ?, 
-      habitos_mas = ?, 
-      necesidades_mas = ?, 
-      lugar_rescate_mas = ?, 
-      condiciones_estado_mas = ?, 
-      tiempo_en_refugio_mas = ?, 
-      genero_mas = ?, 
-      estado_mas = ?, 
-      fk_raza_mas = ?, 
-      imagen_pet = ? 
-    WHERE pk_id_mas = ?`;
+      nombre_mas = COALESCE(?, nombre_mas), 
+      edad_mas = COALESCE(?, edad_mas), 
+      tamano_mas = COALESCE(?, tamano_mas), 
+      peso_mas = COALESCE(?, peso_mas), 
+      descripcion_mas = COALESCE(?, descripcion_mas), 
+      vacunacion_mas = COALESCE(?, vacunacion_mas), 
+      esterilizacion_castracion_mas = COALESCE(?, esterilizacion_castracion_mas), 
+      enfermedades_mas = COALESCE(?, enfermedades_mas), 
+      tratamientos_mas = COALESCE(?, tratamientos_mas), 
+      energia_mas = COALESCE(?, energia_mas), 
+      compatibilidad_mas = COALESCE(?, compatibilidad_mas), 
+      habitos_mas = COALESCE(?, habitos_mas), 
+      necesidades_mas = COALESCE(?, necesidades_mas), 
+      lugar_rescate_mas = COALESCE(?, lugar_rescate_mas), 
+      condiciones_estado_mas = COALESCE(?, condiciones_estado_mas), 
+      tiempo_en_refugio_mas = COALESCE(?, tiempo_en_refugio_mas), 
+      genero_mas = COALESCE(?, genero_mas), 
+      fk_raza_mas = COALESCE(?, fk_raza_mas)`;
 
-    const imagen_pet = req.file ? req.file.originalname : "";
-
-    const values = [ 
+    const params = [ 
       nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, 
       esterilizacion_castracion_mas, enfermedades_mas, tratamientos_mas, energia_mas, 
       compatibilidad_mas, habitos_mas, necesidades_mas, lugar_rescate_mas, 
-      condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, 'activo', fk_raza_mas, 
-      imagen_pet, id 
+      condiciones_estado_mas, tiempo_en_refugio_mas, genero_mas, fk_raza_mas 
     ];
 
-    const [result] = await pool.query(sql, values);
+    if (imagen_pet) {
+      sql += `, imagen_pet = ?`;
+      params.push(imagen_pet);
+    }
+
+    sql += ` WHERE pk_id_mas = ?`;
+    params.push(id);
+
+    const [result] = await pool.query(sql, params);
+
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Mascota actualizada exitosamente" });
     } else {
-      res.status(404).json({ message: "No se pudo actualizar la mascota" });
+      res.status(404).json({ message: "No se encontró la mascota o no se realizó ninguna actualización" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error en el servidor: " + error });
+    res.status(500).json({ message: "Error en el servidor: " + error.message });
   }
 };
 
 
+
 export const desactivarMascota = async (req, res) => {
   const id = req.params.id;
+  const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
   try {
-    const [result] = await pool.query(`UPDATE mascotas SET estado_mas = 2 WHERE pk_id_mas = ${id}`);
+    const [result] = await pool.query(
+      `UPDATE mascotas SET estado_mas = 2, fecha_adop_mas = ? WHERE pk_id_mas = ?`, [currentDate, id] );
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Mascota desactivada exitosamente" });
     } else {
       res.status(404).json({ message: `No se encontró ninguna mascota con el ID ${id}` });
     }
   } catch (error) {
+    console.error("Error en el servidor:", error);
     res.status(500).json({ message: "Error en el servidor" + error });
   }
 };
+
 
 export const activarMascota = async (req, res) => {
   const id = req.params.id;
@@ -253,9 +286,10 @@ export const activarMascota = async (req, res) => {
 export const esperaMascota = async (req, res) => {
   const id = req.params.id;
   const { adoptanteId } = req.body;
+  const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
   try {
-    const [result] = await pool.query(`UPDATE mascotas SET estado_mas = 3, fk_adoptante = ? WHERE pk_id_mas = ?`, [adoptanteId, id]);
+    const [result] = await pool.query(`UPDATE mascotas SET estado_mas = 3, fk_adoptante = ?, fecha_adop_mas = ? WHERE pk_id_mas = ?`, [adoptanteId, currentDate, id]);
 
     if (result.affectedRows > 0) {
       res.status(200).json({ message: "Mascota en espera exitosamente" });
