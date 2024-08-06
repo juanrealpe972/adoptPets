@@ -54,42 +54,12 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { 
-      pk_id_user, 
-      nombre_user, 
-      email_user, 
-      password_user, 
-      telefono_user, 
-      ubicacion_user, 
-      tipo_vivienda_user, 
-      espacio_dispo_user, 
-      canti_mas_hogar_user, 
-      horas_en_casa_user, 
-      experiencia_user, 
-      disponibilidad_user, 
-      economia_user, 
-      fk_id_municipio 
-    } = req.body;
+    const {  pk_id_user,  nombre_user,  email_user,  password_user,  telefono_user,  ubicacion_user,  tipo_vivienda_user,  espacio_dispo_user,  canti_mas_hogar_user,  horas_en_casa_user,  experiencia_user,  disponibilidad_user,  economia_user,  fk_id_municipio  } = req.body;
     
     const bcryptPassword = bcrypt.hashSync(password_user, 12);
     
     const sql = `INSERT INTO usuarios (pk_id_user, nombre_user, email_user, password_user, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio, rol_user, estado_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'visitante', 'activo')`;
-    const values = [
-      pk_id_user, 
-      nombre_user, 
-      email_user, 
-      bcryptPassword, 
-      telefono_user, 
-      ubicacion_user, 
-      tipo_vivienda_user, 
-      espacio_dispo_user, 
-      canti_mas_hogar_user, 
-      horas_en_casa_user, 
-      experiencia_user, 
-      disponibilidad_user, 
-      economia_user, 
-      fk_id_municipio
-    ];
+    const values = [pk_id_user, nombre_user, email_user, bcryptPassword, telefono_user, ubicacion_user, tipo_vivienda_user, espacio_dispo_user, canti_mas_hogar_user, horas_en_casa_user, experiencia_user, disponibilidad_user, economia_user, fk_id_municipio];
     
     const [result] = await pool.query(sql, values);
     

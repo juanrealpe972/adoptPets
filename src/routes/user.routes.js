@@ -8,7 +8,6 @@ import {
     desactivarUsuario,
     getUser
 } from "../controllers/user.controller.js";
-import { validationRegisterUser, validationUpdateUser } from "../validations/user.validation.js";
 
 const routerUser = Router();
 

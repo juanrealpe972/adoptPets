@@ -7,7 +7,7 @@ import routerUser from "./src/routes/user.routes.js";
 import routerPet from "./src/routes/pets.routes.js";
 import routerHelps from "./src/routes/help.routes.js";
 
-import { PORT } from "./src/config.js";
+export const PORT = 3000
 
 const app = express();
 app.use(cors());
@@ -33,4 +33,4 @@ app.get("/documents", (req, res) => {
 
 app.listen(PORT, () => {
   console.log("El servidor se esta ejecutando en el puerto: ", PORT);
-}); 
+});
