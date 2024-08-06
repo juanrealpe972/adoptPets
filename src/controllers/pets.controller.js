@@ -186,6 +186,11 @@ export const createPet = async (req, res) => {
 
 export const updatePet = async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const id = req.params.id;
     const { 
       nombre_mas, edad_mas, tamano_mas, peso_mas, descripcion_mas, vacunacion_mas, 
@@ -242,6 +247,8 @@ export const updatePet = async (req, res) => {
     res.status(500).json({ message: "Error en el servidor: " + error.message });
   }
 };
+
+
 
 export const desactivarMascota = async (req, res) => {
   const id = req.params.id;
