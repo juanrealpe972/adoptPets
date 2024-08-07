@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-07-2024 a las 02:22:50
+-- Tiempo de generación: 07-08-2024 a las 05:40:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -80,25 +80,24 @@ CREATE TABLE `mascotas` (
   `compatibilidad_mas` enum('Si','No') NOT NULL,
   `habitos_mas` varchar(200) NOT NULL,
   `necesidades_mas` varchar(200) NOT NULL,
-  `lugar_rescate_mas` int(11) NOT NULL,
+  `lugar_rescate_mas` varchar(200) NOT NULL,
   `condiciones_estado_mas` enum('Mal','Regular','Bien','Muy Bien') NOT NULL,
   `tiempo_en_refugio_mas` int(11) NOT NULL,
   `genero_mas` enum('Macho','Hembra') NOT NULL,
   `estado_mas` enum('activo','inactivo','espera') NOT NULL,
   `fk_raza_mas` int(11) NOT NULL,
   `imagen_pet` varchar(200) DEFAULT NULL,
-  `fk_adoptante` int(11) DEFAULT NULL
+  `fk_adoptante` int(11) DEFAULT NULL,
+  `fecha_adop_mas` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `mascotas`
 --
 
-INSERT INTO `mascotas` (`pk_id_mas`, `nombre_mas`, `edad_mas`, `tamano_mas`, `peso_mas`, `descripcion_mas`, `vacunacion_mas`, `esterilizacion_castracion_mas`, `enfermedades_mas`, `tratamientos_mas`, `energia_mas`, `compatibilidad_mas`, `habitos_mas`, `necesidades_mas`, `lugar_rescate_mas`, `condiciones_estado_mas`, `tiempo_en_refugio_mas`, `genero_mas`, `estado_mas`, `fk_raza_mas`, `imagen_pet`, `fk_adoptante`) VALUES
-(1, 'Firulais', 5, 50, 20, 'Es un perro amigable y juguetón.', 'Si', 'Si', 'No', 'No', 8, 'Si', 'Le gusta correr en el parque.', 'Necesita ejercicio diario.', 1, 'Muy Bien', 3, 'Macho', 'activo', 2, NULL, NULL),
-(3, 'Firulais2.0', 5, 50, 20, 'Es un perro amigable y juguetón.', 'Si', 'Si', 'No', 'No', 8, 'Si', 'Le gusta correr en el parque.', 'Necesita ejercicio diario.', 1, 'Muy Bien', 3, 'Macho', 'inactivo', 2, 'logo_adoptpets.jpg', 1084251889),
-(4, 'Firulais2.1', 5, 50, 20, 'Es un perro amigable y juguetón.', 'Si', 'Si', 'No', 'No', 8, 'Si', 'Le gusta correr en el parque.', 'Necesita ejercicio diario.', 1, 'Muy Bien', 3, 'Macho', 'activo', 2, 'logo_adoptpets.jpg', NULL),
-(5, 'Firulais2.2', 5, 50, 20, 'Es un perro amigable y juguetón.', 'Si', 'Si', 'No', 'No', 8, 'Si', 'Le gusta correr en el parque.', 'Necesita ejercicio diario.', 1, 'Muy Bien', 3, 'Macho', 'activo', 2, 'logo_adoptpets.jpg', NULL);
+INSERT INTO `mascotas` (`pk_id_mas`, `nombre_mas`, `edad_mas`, `tamano_mas`, `peso_mas`, `descripcion_mas`, `vacunacion_mas`, `esterilizacion_castracion_mas`, `enfermedades_mas`, `tratamientos_mas`, `energia_mas`, `compatibilidad_mas`, `habitos_mas`, `necesidades_mas`, `lugar_rescate_mas`, `condiciones_estado_mas`, `tiempo_en_refugio_mas`, `genero_mas`, `estado_mas`, `fk_raza_mas`, `imagen_pet`, `fk_adoptante`, `fecha_adop_mas`) VALUES
+(30, 'Furia', 25, 80, 55, 'Animal de color blanco saludable ', 'Si', 'Si', 'No', 'No', 7, 'Si', 'Correr ', 'Ninguna', 'Yamboro', 'Muy Bien', 5, 'Macho', 'activo', 1, 'IMG_20240801_030041.jpg', NULL, NULL),
+(31, 'Metralleta', 8, 60, 45, 'Es saludable ', 'Si', 'Si', 'No', 'No', 8, 'Si', 'Salir a correr', 'Ninguna', 'Yamboro', 'Muy Bien', 3, 'Macho', 'activo', 1, 'IMG_20240801_030100.jpg', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -155,7 +154,7 @@ INSERT INTO `razas` (`pk_id_raza`, `nombre_raza`, `fk_id_cate`) VALUES
 CREATE TABLE `usuarios` (
   `pk_id_user` int(11) NOT NULL,
   `nombre_user` varchar(200) NOT NULL,
-  `telefono_user` int(11) NOT NULL,
+  `telefono_user` bigint(20) NOT NULL,
   `email_user` varchar(200) NOT NULL,
   `password_user` varchar(200) NOT NULL,
   `ubicacion_user` enum('Barrio','Vereda') NOT NULL,
@@ -176,7 +175,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`pk_id_user`, `nombre_user`, `telefono_user`, `email_user`, `password_user`, `ubicacion_user`, `tipo_vivienda_user`, `espacio_dispo_user`, `canti_mas_hogar_user`, `horas_en_casa_user`, `experiencia_user`, `disponibilidad_user`, `economia_user`, `estado_user`, `rol_user`, `fk_id_municipio`) VALUES
-(1084251889, 'Juan', 2147483647, 'juan@gmail.com', '$2b$12$lqihg049Mv3kz1Mpy9viG.08vnpjuohASlbGAq3o0sPoTegVdFt1m', 'Barrio', 'Casa', 'Jardin', 0, 8, 'Si', 4, 'Buena', 'activo', 'visitante', 2);
+(1234312, 'cami', 43121, 'cami@gmail.com', '$2b$12$uowOEniXLdiYw7mPK.nYBOPRCpDtBKTsgk6rqOxyc2f52Vt6vXf8u', 'Barrio', 'Casa', 'Patio', 3, 15, 'Si', 4, 'Muy Buena', 'activo', 'visitante', 1),
+(1084251889, 'Juan Camilo Realpe', 2147483647, 'juan@gmail.com', '$2b$12$lqihg049Mv3kz1Mpy9viG.08vnpjuohASlbGAq3o0sPoTegVdFt1m', 'Barrio', 'Casa', 'Jardin', 1, 15, 'Si', 4, 'Buena', 'activo', 'admin', 3);
 
 --
 -- Índices para tablas volcadas
@@ -199,8 +199,8 @@ ALTER TABLE `departamentos`
 --
 ALTER TABLE `mascotas`
   ADD PRIMARY KEY (`pk_id_mas`),
-  ADD UNIQUE KEY `adoptar` (`fk_adoptante`),
-  ADD KEY `tener` (`fk_raza_mas`) USING BTREE;
+  ADD KEY `tener` (`fk_raza_mas`) USING BTREE,
+  ADD KEY `adoptar` (`fk_adoptante`) USING BTREE;
 
 --
 -- Indices de la tabla `municipios`
@@ -221,7 +221,7 @@ ALTER TABLE `razas`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`pk_id_user`) USING BTREE,
-  ADD UNIQUE KEY `pertenecer` (`fk_id_municipio`);
+  ADD KEY `pertenecer` (`fk_id_municipio`) USING BTREE;
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -243,7 +243,7 @@ ALTER TABLE `departamentos`
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `pk_id_mas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pk_id_mas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `municipios`
